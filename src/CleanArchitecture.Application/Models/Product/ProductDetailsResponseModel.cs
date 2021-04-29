@@ -1,16 +1,16 @@
-﻿using CleanArchitecture.Domain.Entites;
+﻿using System;
+using CleanArchitecture.Domain.Entites;
 using CleanArchitecture.Domain.Enums;
-using System;
 
-namespace CleanArchitecture.Application.Models.ResponseModels
+namespace CleanArchitecture.Application.Models.Product
 {
-    public class ProductQueryResponseModel : AuditableEntity
+    public class ProductDetailsResponseModel: AuditableEntity
     {
         public Guid ProductID { get; set; }
         public string ProductKey { get; set; }
         public string ProductName { get; set; }
         public string ProductImageUri { get; set; }
-        public Guid ProductTypeID { get; set; }
+        public string ProductTypeName { get; set; }
         public RecordStatus RecordStatus { get; set; }
     }
 }

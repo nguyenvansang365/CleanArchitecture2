@@ -1,10 +1,10 @@
-﻿using CleanArchitecture.Domain.Entites;
+﻿using System;
 using CleanArchitecture.Domain.Enums;
-using System;
+using MediatR;
 
-namespace CleanArchitecture.Application.Models.ResponseModels
+namespace CleanArchitecture.Application.CQRS.ProductType.Command
 {
-    public class ProductTypeQueryResponseModel : AuditableEntity
+    public class UpdateProductTypeCommand : IRequest<bool>
     {
         public Guid ProductTypeID { get; set; }
         public string ProductTypeKey { get; set; }

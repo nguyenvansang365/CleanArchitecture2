@@ -1,60 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CleanArchitecture.Application.DatabaseServices;
-using CleanArchitecture.Application.Models;
+using CleanArchitecture.Application.CQRS.Product.Command;
+using CleanArchitecture.Application.CQRS.ProductType.Command;
+using CleanArchitecture.Application.CQRS.ProductType.Query;
+using CleanArchitecture.Application.Models.ProductType;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductTypeController : ControllerBase
+    //[Route("api/[controller]")]
+    //[ApiController]
+    public class ProductTypeController : CustomBaseApiController
     {
-        private readonly IProductTypeService _productTypeService;
-        public ProductTypeController(IProductTypeService productTypeService )
+        public ProductTypeController(IMediator mediator) : base(mediator)
         {
-            _productTypeService = productTypeService;
+
         }
 
         // We can update search criteria later
         [HttpGet]
-        public async Task<IEnumerable<ProductType>> Get()
+        public async Task<IEnumerable<ProductTypeResponseModel>> Get()
         {
-            var result = await _productTypeService.FetchProductType();
-            return result;
+            //var result = await _productTypeService.FetchProductType();
+            //return result;
+            var query = new FetchProductTypeQuery();
+            return await Mediator.Send(query);
         }
 
-        //// GET api/ProductType/ProductTypeID
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<ProductTypeDetailsResponseModel>> Get(Guid id)
-        //{
-        //    var query = new GetProductTypeDetailsQuery() { ProductTypeId = id };
-        //    return await Mediator.Send(query);
-        //}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductTypeDetailsResponseModel>> Get(Guid id)
+        {
+            var query = new GetProductTypeDetailsQuery() { ProductTypeId = id };
+            return await Mediator.Send(query);
+        }
 
         // POST
         [HttpPost]
-        public async Task<ActionResult<bool>> Post(ProductType model)
+        public async Task<ActionResult<bool>> Post(CreateProductTypeCommand command)
         {
-            var result = await _productTypeService.CreateProductType(model);
-            return result;
+            return await Mediator.Send(command);
         }
 
-        //// PUT 
-        //[HttpPut("{id}")]
-        //public async Task<ActionResult<bool>> Put(Guid id, [FromBody]UpdateProductTypeCommand request)
-        //{
-        //    request.ProductTypeID = id;
-        //    return await Mediator.Send(request);
-        //}
+        // PUT 
+        [HttpPut("{id}")]
+        public async Task<ActionResult<bool>> Put(Guid id, [FromBody] UpdateProductCommand request)
+        {
+            request.ProductTypeID = id;
+            return await Mediator.Send(request);
+        }
 
         // DELETE 
         [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> Delete(Guid id)
         {
-            var result = await _productTypeService.DeleteProductType(id);
-            return result;
+            var query = new DeleteProductCommand() { ProductID = id };
+            return await Mediator.Send(query);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.DatabaseServices;
+﻿using CleanArchitecture.Application.DatabaseServices.Interfaces;
 using CleanArchitecture.Infrastructure.DatabaseServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
